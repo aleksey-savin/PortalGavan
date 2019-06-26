@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новый магазин{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(additional_services) }}
+                <p>{{ form_row(additional_services.ServicesSupplier) }}</p>
+                <p>{{ form_row(additional_services.numberOfPersons) }}</p>
+                <p>{{ form_row(additional_services.note) }}</p>
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            {{ form_row(additional_services.save_and_add) }}
+                            {{ form_row(additional_services.save) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(additional_services) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends '/report/consSearch.html.twig' %}
+
+
+{% block header %}Сводный отчёт по магазинам{% endblock %}
+{% block date_type %}Дата покупки{% endblock %}
+
+{% block report %}
+    <div class="container">
+        <div class="row">
+            {% if tradePoint %}
+                <table id="report-tradePoint-table" class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Магазин</th>
+                    <th>Сумма покупок</th>
+                    <th>Комиссия гидов</th>
+                    <th>Комиссия рук. групп</th>
+                    <th>Комиссия компании</th>
+                    <th>Общая комиссия</th>
+                    </thead>
+                    <tbody>
+                    {% set SumTotalSalesReceipt = 0 %}
+                    {% set SumTotalGuideCommission = 0 %}
+                    {% set SumTotalGroupLeaderCommission = 0 %}
+                    {% set SumTotalCompanyCommission = 0 %}
+                    {% set Total = 0 %}
+                    {% set Sum = 0 %}
+                    {% for t in tradePoint %}
+                        {% set TotalSalesReceipt = 0 %}
+                        {% set TotalGuideCommission = 0 %}
+                        {% set TotalGroupLeaderCommission = 0 %}
+                        {% set TotalCompanyCommission = 0 %}
+                        {% for p in t.purchases %}
+                            {% set TotalSalesReceipt = TotalSalesReceipt + p.salesReceipt %}
+                            {% set TotalGuideCommission = TotalGuideCommission + p.guideCommissionValue %}
+                            {% set TotalGroupLeaderCommission = TotalGroupLeaderCommission + p.groupLeaderCommissionValue %}
+                            {% set TotalCompanyCommission = TotalCompanyCommission + p.companyCommissionValue %}
+                            {% set Total = TotalGuideCommission + TotalCompanyCommission + TotalGroupLeaderCommission %}
+                        {% endfor %}
+                        {% set SumTotalCompanyCommission = SumTotalCompanyCommission + TotalCompanyCommission %}
+                        {% set SumTotalGroupLeaderCommission = SumTotalGroupLeaderCommission + TotalGroupLeaderCommission%}
+                        {% set SumTotalGuideCommission = SumTotalGuideCommission + TotalGuideCommission %}
+                        {% set SumTotalSalesReceipt = SumTotalSalesReceipt + TotalSalesReceipt %}
+                        {% set Sum = Sum + Total %}
+
+                        <tr>
+                            <td>{{ t.name }}</td>
+                            <td>{{ TotalSalesReceipt }}</td>
+                            <td>{{ TotalGuideCommission }}</td>
+                            <td>{{ TotalGroupLeaderCommission }}</td>
+                            <td>{{ TotalCompanyCommission }}</td>
+                            <td>{{ Total }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th>{{ SumTotalSalesReceipt|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumTotalGuideCommission|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumTotalGroupLeaderCommission|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumTotalCompanyCommission|localizedcurrency('RUB') }}</th>
+                        <th>{{ Sum|localizedcurrency('RUB') }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/tradePoints_report.js"></script>
+{% endblock %}

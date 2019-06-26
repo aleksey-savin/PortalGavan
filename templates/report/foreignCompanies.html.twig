@@ -1,0 +1,81 @@
+{% extends '/report/consSearch.html.twig' %}
+
+
+{% block header %}Сводный отчёт по иностранным компаниям{% endblock %}
+{% block date_type %}Дата выезда тур. группы{% endblock %}
+
+{% block report %}
+    <div class="container">
+        <div class="row">
+            {% if foreignCompany %}
+                <table id="report-foreignCompany-table" class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Иностранная компания</th>
+                    <th>Прибыль/убыток</th>
+                    <th>Прибыль по магазинам + катер</th>
+                    <th>Заработная плата переводчиков (катер+магазин)</th>
+
+                    </thead>
+                    <tbody>
+                    {% set SumIncome = 0 %}
+                    {% set SumPurchasesIncome = 0 %}
+                    {% set SumAdServices = 0 %}
+                    {% set SumGuideCommission = 0 %}
+                    {% for f in foreignCompany %}
+                        {% set Income = 0 %}
+                        {% set PurchasesIncome = 0 %}
+                        {% set AdServicesIncome = 0 %}
+                        {% set PurchasesGuideIncome = 0 %}
+                        {% set AdServicesGuideIncome = 0 %}
+                        {% for t in f.touristGroups %}
+                            {% set Income = Income + t.incomeServicesPaymentTotal -
+                                t.expenseMeeting -
+                                t.expenseTransport -
+                                t.expenseSeeingOff -
+                                t.expenseBread -
+                                t.expenseTicketsTotal -
+                                t.expenseEcoDuesTotal -
+                                t.expenseBoatTotal -
+                                t.expenseArMuseumTotal -
+                                t.expenseTuriyRogTotal
+                            %}
+                            {% for purchase in t.purchases %}
+                                {% set PurchasesIncome = PurchasesIncome + purchase.companyCommissionValue %}
+                                {% set PurchasesGuideIncome = PurchasesGuideIncome + purchase.guideCommissionValue %}
+                            {% endfor %}
+                            {% for adservice in t.additionalServices %}
+                                {% set AdServicesIncome = AdServicesIncome + adservice.companyCommissionValue %}
+                                {% set AdServicesGuideIncome = AdServicesGuideIncome + adservice.guideCommissionValue %}
+                            {% endfor %}
+                        {% endfor %}
+                        <tr>
+                            <td>{{ f.name }}</td>
+                            <td>{{ (Income + PurchasesIncome + AdServicesIncome) }}</td>
+                            <td>{{ (PurchasesIncome + AdServicesIncome) }}</td>
+                            <td>{{ (PurchasesGuideIncome + AdServicesGuideIncome) }}</td>
+                        </tr>
+                        {% set SumIncome = SumIncome + Income + PurchasesIncome + AdServicesIncome %}
+                        {% set SumPurchasesIncome = SumPurchasesIncome + PurchasesIncome %}
+                        {% set SumAdServices = SumAdServices + AdServicesIncome %}
+                        {% set SumGuideCommission = SumGuideCommission + PurchasesGuideIncome + AdServicesGuideIncome %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th>{{ SumIncome|localizedcurrency('RUB') }}</th>
+                        <th>{{ (SumPurchasesIncome + SumAdServices)|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumGuideCommission|localizedcurrency('RUB') }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/foreign_companies_report.js"></script>
+{% endblock %}

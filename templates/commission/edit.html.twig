@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактирование комиссии{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(commission) }}
+                <p>{{ form_row(commission.name) }}</p>
+                <p>{{ form_row(commission.type) }}</p>
+                <p>{{ form_row(commission.totalCommissionPct) }}</p>
+                <p>{{ form_row(commission.ftotalCommissionPct) }}</p>
+                <p>{{ form_row(commission.groupLeaderCommissionPct) }}</p>
+                <p>{{ form_row(commission.guideCommissionPct) }}</p>
+                <p>{{ form_row(commission.companyCommissionPct) }}</p>
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        {{ form_row(commission.save) }}
+                    </div>
+                </div>
+
+                {{ form_end(commission) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

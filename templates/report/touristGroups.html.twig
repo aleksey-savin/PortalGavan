@@ -1,0 +1,90 @@
+{% extends '/report/search.html.twig' %}
+
+{% block header %}Отчёт по тур. группам{% endblock %}
+{% block date_type %}Дата выезда тур. группы{% endblock %}
+{% block report %}
+    <div class="container">
+        <div class="row">
+            {% if tourist_group %}
+                <table id="report-table" class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>#</th>
+                    <th>Иностранная компания</th>
+                    <th>Количество человек</th>
+                    <th>Гид</th>
+                    <th>Дата заезда</th>
+                    <th>Дата выезда</th>
+                    <th>Прибыль по магазинам</th>
+                    <th>Прибыль по доп. услугам</th>
+                    <th>Заработная плата гида</th>
+                    <th>Прибыль/убыток</th>
+                    </thead>
+                    <tbody>
+                    {% for group in tourist_group %}
+                        <tr>
+                            <td><a href="/tourist_group/{{ group.id }}">{{ group.id }}</a></td>
+                            {% if group.foreignCompany %}
+                                <td>{{  group.foreignCompany.name }}</td>
+                            {% else %}
+                                <td>-</td>
+                            {% endif %}
+                            <td>{{ group.numberOfPersons }}</td>
+                            <td>{{ group.appUser.realName }}</td>
+                            <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                            <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+
+                            {% set Income = group.incomeServicesPaymentTotal -
+                                group.expenseMeeting -
+                                group.expenseTransport -
+                                group.expenseSeeingOff -
+                                group.expenseBread -
+                                group.expenseTicketsTotal -
+                                group.expenseEcoDuesTotal -
+                                group.expenseBoatTotal -
+                                group.expenseArMuseumTotal -
+                                group.expenseTuriyRogTotal
+                            %}
+                            {% set PurchasesIncome = 0 %}
+                            {% set PurchasesGuideIncome = 0 %}
+                            {% for purchase in group.purchases %}
+                                {% set PurchasesIncome = PurchasesIncome + purchase.companyCommissionValue %}
+                                {% set PurchasesGuideIncome = PurchasesGuideIncome + purchase.guideCommissionValue %}
+                            {% endfor %}
+                            {% set AdServicesIncome = 0 %}
+                            {% set AdServicesGuideIncome = 0 %}
+                            {% for adservice in group.additionalServices %}
+                                {% set AdServicesIncome = AdServicesIncome + adservice.companyCommissionValue %}
+                                {% set AdServicesGuideIncome = AdServicesGuideIncome + adservice.guideCommissionValue %}
+                            {% endfor %}
+                            <td>{{ PurchasesIncome }}</td>
+                            <td>{{ AdServicesIncome }}</td>
+                            <td>{{ PurchasesGuideIncome + AdServicesGuideIncome }}</td>
+                            <td>{{ Income + PurchasesIncome + AdServicesIncome }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% else %}
+                <p>Туристические группы отсутствуют</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/tourist_groups_report.js"></script>
+{% endblock %}

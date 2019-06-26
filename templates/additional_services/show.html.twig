@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>{{ additional_services.servicesSupplier.name }}</h1>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>Количество человек</th>
+                        <td>{{ additional_services.numberOfPersons }}</td>
+                    </tr>
+                    {% if is_granted(expression('"ROLE_ADMIN" in roles')) %}
+                    <tr>
+                        <th>Комиссия гида</th>
+                        <td>{{ additional_services.guideCommissionValue|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Прибыль компании</th>
+                        <td>{{ additional_services.companyCommissionValue|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Себестоимость</th>
+                        <td>{{ additional_services.costPrice|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Приход</th>
+                        <td>{{ additional_services.incomeValue|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Примечание</th>
+                        <td>{{ additional_services.note }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <a href="/additional_services/edit/{{ additional_services.id }}?tourist_group={{ additional_services.touristGroup.id }}" class="btn btn-success">Изменить</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

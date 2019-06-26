@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <a href="/additional_services/new" class="btn btn-success">Новый поставщик</a>
+    <hr>
+    <h1>Список поставщиков услуг</h1>
+
+    {% if servicesSupplier %}
+        <table id="additional-services" class="table table-striped table-bordered">
+            <thead class="thead-light">
+            <th>Наименование</th>
+            <th>Себестоимость за человека, руб.</th>
+            <th>Контактное лицо</th>
+            <th>Контактный номер</th>            
+            <th>Примечание</th>
+            </thead>
+            <tbody>
+            {% for supplier in servicesSupplier %}
+                <tr>
+                    <td><a href="/additional_services/{{ supplier.id }}">{{ supplier.name }}</a></td>
+                    <td>{{ supplier.costPerPerson|localizedcurrency('RUB') }}</td>
+                    <td>{{ supplier.contactName }}</td>
+                    <td>{{ supplier.contactNumber }}</td>
+                    <td>{{ supplier.note }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <p>Поставщики услуг отсутствуют</p>
+    {% endif %}
+{% endblock %}

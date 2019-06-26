@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактирование доходов/расходов{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10">
+                {{ form_start(tourist_group) }}
+                <h3>Доходы</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Цена за человека</th>
+                        <th>Количество человек</th>
+                        <th>Стоимость за группу</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ form_label(tourist_group.incomeServicesPaymentPerPerson) }}</td>
+                        <td>
+                            {{ form_widget(tourist_group.incomeServicesPaymentPerPerson) }}
+                        </td>
+                        <td>
+                            {{ form_widget(tourist_group.incomeServicesPaymentNumberOfPersons) }}
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h3>Расходы</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Цена за человека</th>
+                        <th>Количество человек</th>
+                        <th>Стоимость за группу</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>{{ form_label(tourist_group.expenseMeeting) }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseMeeting) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseTransport) }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseTransport) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseSeeingOff) }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseSeeingOff) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseBread) }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseBread) }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseTicketsPerPerson) }}</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseTicketsPerPerson) }}
+                        </td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseTicketsNumberOfPersons) }}
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseEcoDuesPerPerson) }}</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseEcoDuesPerPerson) }}
+                        </td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseEcoDuesNumberOfPersons) }}
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseBoatPerAdultPerson) }}</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseBoatPerAdultPerson) }}
+                        </td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseBoatNumberOfPersons) }}
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseArMuseumPerPerson) }}</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseArMuseumPerPerson) }}
+                        </td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseArMuseumNumberOfPersons) }}
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form_label(tourist_group.expenseTuriyRogPerPerson) }}</td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseTuriyRogPerPerson) }}
+                        </td>
+                        <td>
+                            {{ form_widget(tourist_group.expenseTuriyRogNumberOfPersons) }}
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>{{ form_widget(tourist_group.save) }}</p>
+                {{ form_end(tourist_group) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

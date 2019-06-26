@@ -1,0 +1,83 @@
+{% extends '/report/consSearch.html.twig' %}
+
+
+{% block header %}Сводный отчёт по гидам{% endblock %}
+{% block date_type %}Дата выезда тур. группы{% endblock %}
+
+{% block report %}
+    <div class="container">
+        <div class="row">
+            {% if guide %}
+                <table id="report-guide-table" class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Гид</th>
+                    <th>Прибыль/убыток</th>
+                    <th>Прибыль по магазинам</th>
+                    <th>Прибыль по доп. услугам</th>
+                    <th>Заработная плата гида</th>
+                    </thead>
+                    <tbody>
+                    {% set SumIncome = 0 %}
+                    {% set SumPurchasesIncome = 0 %}
+                    {% set SumAdServices = 0 %}
+                    {% set SumGuideCommission = 0 %}
+                    {% for g in guide %}
+                        {% set Income = 0 %}
+                        {% set PurchasesIncome = 0 %}
+                        {% set PurchasesGuideIncome = 0 %}
+                        {% set AdServicesIncome = 0 %}
+                        {% set AdServicesGuideIncome = 0 %}
+                        {% for group in g.touristGroups %}
+                            {% set Income = Income + group.incomeServicesPaymentTotal -
+                                group.expenseMeeting -
+                                group.expenseTransport -
+                                group.expenseSeeingOff -
+                                group.expenseBread -
+                                group.expenseTicketsTotal -
+                                group.expenseEcoDuesTotal -
+                                group.expenseBoatTotal -
+                                group.expenseArMuseumTotal -
+                                group.expenseTuriyRogTotal
+                            %}
+                            {% for purchase in group.purchases %}
+                                {% set PurchasesIncome = PurchasesIncome + purchase.companyCommissionValue %}
+                                {% set PurchasesGuideIncome = PurchasesGuideIncome + purchase.guideCommissionValue %}
+                            {% endfor %}
+                            {% for adservice in group.additionalServices %}
+                                {% set AdServicesIncome = AdServicesIncome + adservice.companyCommissionValue %}
+                                {% set AdServicesGuideIncome = AdServicesGuideIncome + adservice.guideCommissionValue %}
+                            {% endfor %}
+                        {% endfor %}
+                        <tr>
+                            <td>{{ g.realName }}</td>
+                            <td>{{ (Income + PurchasesIncome + AdServicesIncome) }}</td>
+                            <td>{{ PurchasesIncome }}</td>
+                            <td>{{ AdServicesIncome }}</td>
+                            <td>{{ (PurchasesGuideIncome + AdServicesGuideIncome) }}</td>
+                        </tr>
+                        {% set SumIncome = SumIncome + Income + PurchasesIncome + AdServicesIncome %}
+                        {% set SumPurchasesIncome = SumPurchasesIncome + PurchasesIncome %}
+                        {% set SumAdServices = SumAdServices + AdServicesIncome %}
+                        {% set SumGuideCommission = SumGuideCommission + PurchasesGuideIncome + AdServicesGuideIncome %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th>{{ SumIncome|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumPurchasesIncome|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumAdServices|localizedcurrency('RUB') }}</th>
+                        <th>{{ SumGuideCommission|localizedcurrency('RUB') }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/guides_report.js"></script>
+{% endblock %}

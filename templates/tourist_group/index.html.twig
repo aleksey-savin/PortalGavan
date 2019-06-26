@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+    <a href="/tourist_group/new" class="btn btn-success">Новая группа</a>
+    <hr>
+    <h1>Полный список групп</h1>
+    <div id="buttons"></div>
+    {% if tourist_group %}
+        <table id="standard-table" class="table table-striped table-bordered">
+            <thead class="thead-light">
+            <th>#</th>
+            <th>Гид</th>
+            <th>Номер ПЛОТ</th>
+            <th>Количество человек</th>
+            <th>Количество детей</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            <th>Иностраннная компания</th>
+            <th>Статус</th>
+            </thead>
+            <tbody>
+            {% for group in tourist_group %}
+                <tr>
+                    <td><a href="/tourist_group/{{ group.id }}">{{ group.id }}</a></td>
+                    <td>{{ group.appUser.realName }}</td>
+                    {% if group.appUser.PLOTNumber %}
+                        <td>{{ group.appUser.PLOTNumber }}</td>
+                    {% else %}
+                        <td>-</td>
+                    {% endif %}
+                    <td>{{ group.numberOfPersons }}</td>
+                    <td>{{ group.numberOfChildPersons }}</td>
+                    <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                    <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                    {% if group.foreignCompany %}
+                        <td>{{ group.foreignCompany.name }}</td>
+                        {% else %}
+                        <td>-</td>
+                    {% endif %}
+                    {% if group.status == 'newGroup' %}
+                        <td>Новая группа</td>
+                    {% elseif group.status == 'approveRequest' %}
+                        <td>Запрос на утверждение</td>
+                    {% elseif group.status == 'reportApproved' %}
+                        <td>Отчёт утверждён</td>
+                    {% else %}
+                        <td>В архиве</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Туристические группы отсутствуют</p>
+    {% endif %}
+{% endblock %}

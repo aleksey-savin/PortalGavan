@@ -1,0 +1,123 @@
+.main {
+    margin-top: 5rem;
+    height: 100%;
+}
+
+footer {
+    height: 5rem;
+    width: 100%;
+}
+
+.form-control {
+    width: 96%;
+    display: inline;
+}
+
+/* LOGIN FORM */
+
+body#LoginForm {
+    background-image: url("../img/blur-wallpaper.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 12em;
+}
+
+.form-heading {
+    color: #fff;
+    font-size: 23px;
+}
+
+.panel h2 {
+    color: #444444;
+    font-size: 18px;
+    margin: 0 0 8px 0;
+}
+
+.panel p {
+    color: #777777;
+    font-size: 14px;
+    margin-bottom: 30px;
+    line-height: 24px;
+}
+
+.login-form .form-control {
+    background: #f7f7f7 none repeat scroll 0 0;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    font-size: 14px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.main-div {
+    background: #ffffff none repeat scroll 0 0;
+    border-radius: 2px;
+    margin: 10px auto 30px;
+    max-width: 38%;
+    padding: 4em;
+}
+
+.login-form .form-group {
+    margin-bottom: 10px;
+}
+
+.login-form {
+    text-align: center;
+}
+
+.login-form .btn.btn-primary {
+    color: #ffffff;
+    font-size: 14px;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+}
+
+
+@media only screen and (max-width: 1280px) {
+
+    body#LoginForm {
+        padding: 12em;
+    }
+
+    .main-div {
+        margin: 3em auto;
+        max-width: 75%;
+        padding: 2em;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    body#LoginForm {
+        padding: 0;
+    }
+
+    .panel h2 {
+        font-size:22px;
+    }
+
+    .panel p {
+        font-size:16px;
+    }
+
+    .main-div {
+        margin: 3em auto;
+        max-width: 100%;
+        padding: 2em;
+    }
+}
+
+/* LOGIN FORM ERROR */
+
+.error {
+    color: red;
+}
+
+/* REPORTS STYLES */
+
+#report_from, #report_till {
+    width: 15rem;
+}

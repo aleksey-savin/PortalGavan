@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новый вид услуги{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(services_supplier) }}
+                <p>{{ form_row(services_supplier.name) }}</p>
+                <p>{{ form_row(services_supplier.costPerPerson) }}</p>
+                <p>{{ form_row(services_supplier.costForClient) }}</p>
+                <p>{{ form_row(services_supplier.guideCommissionPct) }}</p>
+                <p>{{ form_row(services_supplier.contactName) }}</p>
+                <p>{{ form_row(services_supplier.contactNumber) }}</p>
+                <p>{{ form_row(services_supplier.note) }}</p>
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        {{ form_row(services_supplier.save) }}
+                        <div style="margin: 1rem"><a href="/services_supplier" class="btn btn-secondary">Назад</a></div>
+                    </div>
+                </div>
+                {{ form_end(services_supplier) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новая иностранная компания{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(foreignCompany) }}
+                <p>{{ form_row(foreignCompany.name) }}</p>
+                <p>{{ form_row(foreignCompany.save) }}</p>
+                {{ form_end(foreignCompany) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

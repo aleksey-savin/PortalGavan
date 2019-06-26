@@ -1,0 +1,51 @@
+{% extends '/report/search.html.twig' %}
+
+{% block header %}Отчёт по покупкам{% endblock %}
+{% block date_type %}Дата покупки{% endblock %}
+
+{% block report %}
+    <div class="container">
+        <div class="row">
+            {% if purchase %}
+                <table id="report-purchase-table" class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Магазин</th>
+                    <th>Гид</th>
+                    <th>Дата покупки</th>
+                    <th>Сумма покупки</th>
+                    <th>Комиссия компании</th>
+                    <th>Общая комиссия</th>
+                    </thead>
+                    <tbody>
+                    {% for p in purchase %}
+                        <tr>
+                            <td>{{ p.tradePoint.name }}</td>
+                            <td>{{ p.touristGroup.appUser.realName }}</td>
+                            <td>{{ p.date|date('d.m.Y') }}</td>
+                            <td>{{ p.salesReceipt }}</td>
+                            <td>{{ p.companyCommissionValue }}</td>
+                            <td>{{ (p.companyCommissionValue + p.guideCommissionValue + p.groupLeaderCommissionValue) }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% else %}
+                <p>Покупки не найдены</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/purchases_report.js"></script>
+{% endblock %}

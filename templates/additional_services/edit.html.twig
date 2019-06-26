@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактирование магазина{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(additional_services) }}
+                <p>{{ form_row(additional_services.ServicesSupplier) }}</p>
+                <p>{{ form_row(additional_services.numberOfPersons) }}</p>
+                {% if is_granted(expression('"ROLE_ADMIN" in roles')) %}
+                    <p>{{ form_row(additional_services.guideCommissionValue) }}</p>
+                    <p>{{ form_row(additional_services.companyCommissionValue) }}</p>
+                    <p>{{ form_row(additional_services.costPrice) }}</p>
+                    <p>{{ form_row(additional_services.incomeValue) }}</p>
+                {% endif %}
+                <p>{{ form_row(additional_services.note) }}</p>
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        {{ form_row(additional_services.save) }}
+                    </div>
+                </div>
+                {{ form_end(additional_services) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

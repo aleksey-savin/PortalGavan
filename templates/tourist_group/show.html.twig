@@ -1,0 +1,417 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>Группа №{{ tourist_group.id }}</h1>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                    <tr>
+                        <td>Гид</td>
+                        <td>{{ tourist_group.appUser.realName }}</td>
+                    </tr>
+                    <tr>
+                        <td>ПЛОТ Номер</td>
+                        {% if tourist_group.appUser.PLOTNumber %}
+                            <td>{{ tourist_group.appUser.PLOTNumber }}</td>
+                        {% else %}
+                            <td>-</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Количество человек</td>
+                        <td>{{ tourist_group.numberOfPersons }}</td>
+                    </tr>
+                    <tr>
+                        <td>Количество детей</td>
+                        <td>{{ tourist_group.numberOfChildPersons }}</td>
+                    </tr>
+                    <tr>
+                        <td>Дата заезда</td>
+                        <td>{{ tourist_group.dateOfArrival|date('d.m.Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Дата выезда</td>
+                        <td>{{ tourist_group.dateOfDeparture|date('d.m.Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Статус группы</td>
+                        {% if tourist_group.status == 'newGroup' %}
+                            <td>Новая группа</td>
+                        {% elseif tourist_group.status == 'approveRequest' %}
+                            <td>Ожидает утверждения отчёта</td>
+                        {% elseif tourist_group.status == 'reportApproved' %}
+                            <td>Отчёт утверждён</td>
+                        {% elseif tourist_group.status == 'archived' %}
+                            <td>В архиве</td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+
+                {% if is_granted(expression('"ROLE_ADMIN" in roles')) %}
+                    <a href="{{ path('edit_tourist_group', {id: tourist_group.id}) }}" class="btn btn-success">Изменить информацию о группе</a>
+                    <hr>
+                {% endif %}
+
+                {# STATUS CHANGE ON BUTTON CLICK. DIFFERENT BUTTONS FOR DIFFERENT ROLES.
+                    {% if is_granted(expression('"ROLE_ADMIN" in roles')) %}
+                    <a href="{{ path('edit_tourist_group', {id: tourist_group.id}) }}" class="btn btn-success">Изменить информацию о группе</a>
+                    <hr>
+                    {% if tourist_group.status == 'approveRequest' %}
+                            <button  id="change-status" class="btn btn-info change-status" data-id="{{ tourist_group.id }}">Утвердить отчёт</button>
+                        {% endif %}
+                        {% if tourist_group.status == 'reportApproved' %}
+                            <button  id="change-status" class="btn btn-info change-status" data-id="{{ tourist_group.id }}">Отправить в архив</button>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if is_granted(expression('"ROLE_GUIDE" in roles')) %}
+                        {% if tourist_group.status == 'newGroup' %}
+                            <button  id="change-status" class="btn btn-info change-status" data-id="{{ tourist_group.id }}">Запрос на утверждение отчёта</button>
+                        {% endif %}
+                    {% endif %}
+                    {% if tourist_group.status != 'archived' %}
+                        <hr>
+                    {% endif %}
+                #}
+
+            </div>
+        </div>
+    </div>
+
+    {% if is_granted(expression('"ROLE_ADMIN" in roles')) %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Доходы</h3>
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Наименование</th>
+                    <th>Цена за человека</th>
+                    <th>Количество человек</th>
+                    <th>Стоимость за группу</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Плата за услуги</td>
+                        <td>{{ tourist_group.incomeServicesPaymentPerPerson|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.incomeServicesPaymentNumberOfPersons|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.incomeServicesPaymentTotal|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th></th><th></th>
+                        <th>{{ tourist_group.incomeServicesPaymentTotal|localizedcurrency('RUB') }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Расходы</h3>
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Наименование</th>
+                    <th>Цена за человека</th>
+                    <th>Количество человек</th>
+                    <th>Стоимость за группу</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Встреча</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{ tourist_group.expenseMeeting|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Транспорт по городу</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{ tourist_group.expenseTransport|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Проводы</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{ tourist_group.expenseSeeingOff|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Хлеб</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>{{ tourist_group.expenseBread|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Билеты</td>
+                        <td>{{ tourist_group.expenseTicketsPerPerson|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.expenseTicketsNumberOfPersons}}</td>
+                        <td>{{ tourist_group.expenseTicketsTotal|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Экосбор</td>
+                        <td>{{ tourist_group.expenseEcoDuesPerPerson|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.expenseEcoDuesNumberOfPersons }}</td>
+                        <td>{{ tourist_group.expenseEcoDuesTotal|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Лодка</td>
+                        <td>{{ tourist_group.expenseBoatPerAdultPerson|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.expenseBoatNumberOfPersons}}</td>
+                        <td>{{ tourist_group.expenseBoatTotal|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Музей Арсеньева</td>
+                        <td>{{ tourist_group.expenseArMuseumPerPerson|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.expenseArMuseumNumberOfPersons}}</td>
+                        <td>{{ tourist_group.expenseArMuseumTotal|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Турий Рог</td>
+                        <td>{{ tourist_group.expenseTuriyRogPerPerson|localizedcurrency('RUB') }}</td>
+                        <td>{{ tourist_group.expenseTuriyRogNumberOfPersons}}</td>
+                        <td>{{ tourist_group.expenseTuriyRogTotal|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>ИТОГО:</th>
+                        <th></th><th></th>
+                        {% set totalE = tourist_group.expenseMeeting +
+                            tourist_group.expenseTransport +
+                            tourist_group.expenseSeeingOff +
+                            tourist_group.expenseBread +
+                            tourist_group.expenseTicketsTotal +
+                            tourist_group.expenseEcoDuesTotal +
+                            tourist_group.expenseBoatTotal %}
+                        <th>{{ totalE|localizedcurrency('RUB') }}</th>
+                    </tr>
+                    </tfoot>
+                </table>
+                <hr>
+                <a href="{{ path('edit_incomes_and_expenses', {id: tourist_group.id}) }}" class="btn btn-success">Внести доходы/расходы</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Покупки</h3>
+                {% if tourist_group.purchases %}
+                    <table id="purchase-table" class="table table-striped table-bordered">
+                        <thead class="thead-light">
+                        <th>Магазин</th>
+                        <th>Тип</th>
+                        <th>Дата</th>
+                        <th>Сумма покупок</th>
+                        <th>Рук. группы</th>
+                        <th>Гид</th>
+                        <th>Компания</th>
+                        <th>Общая сумма</th>
+                        <th>Действия</th>
+                        </thead>
+                        <tbody>
+                        {% set totalP = 0 %}
+                        {% set totalPSales = 0 %}
+                        {% set totalPLeader = 0 %}
+                        {% set totalPGuide = 0 %}
+                        {% set totalPCompany = 0 %}
+                        {% for p in tourist_group.purchases %}
+                            <tr>
+                                <td><a href="/purchase/{{ p.id }}">{{ p.tradePoint.name }}</a></td>
+                                <td>{{ p.commission.name }}</td>
+                                <td>{{ p.date|date('d.m.Y') }}</td>
+                                <td>{{ p.salesReceipt|localizedcurrency('RUB') }}</td>
+                                <td>{{ p.groupLeaderCommissionValue|localizedcurrency('RUB') }}</td>
+                                <td>{{ p.guideCommissionValue|localizedcurrency('RUB') }}</td>
+                                <td>{{ p.companyCommissionValue|localizedcurrency('RUB') }}</td>
+                                {% set sum = p.groupLeaderCommissionValue + p.guideCommissionValue + p.companyCommissionValue %}
+                                <td>{{ sum|localizedcurrency('RUB') }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Действия
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            <a class="dropdown-item" href="/purchase/{{ p.id }}">Просмотр</a>
+                                            <a class="dropdown-item" href="/purchase/edit_base/{{ p.id }}?tourist_group={{ p.touristGroup.id }}">Редактирование</a>
+                                            <a class="dropdown-item" href="/purchase/edit/{{ p.id }}?tourist_group={{ p.touristGroup.id }}">Рассчитать самостоятельно</a>
+                                            <a class="dropdown-item delete-purchase" href="#" data-id="{{ p.id }}">Удалить</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% set totalPSales = totalPSales + p.salesReceipt %}
+                            {% set totalPLeader = totalPLeader + p.groupLeaderCommissionValue %}
+                            {% set totalPGuide = totalPGuide + p.guideCommissionValue %}
+                            {% set totalPCompany = totalPCompany + p.companyCommissionValue %}
+                            {% set totalP = totalP + sum %}
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ИТОГО:</th>
+                                <th></th>
+                                <th></th>
+                                <th>{{ totalPSales|localizedcurrency('RUB') }}</th>
+                                <th>{{ totalPLeader|localizedcurrency('RUB') }}</th>
+                                <th>{{ totalPGuide|localizedcurrency('RUB') }}</th>
+                                <th>{{ totalPCompany|localizedcurrency('RUB') }}</th>
+                                <th>{{ totalP|localizedcurrency('RUB') }}</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                {% else %}
+                    <p>Покупки отсутствуют</p>
+                {% endif %}
+                <hr>
+                <a href="{{ path('new_purchase', {}) }}?tourist_group={{ tourist_group.id }}" class="btn btn-success">Добавить покупки</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Дополнительные услуги</h3>
+                    <table id="ad-ser-table" class="table table-striped table-bordered">
+                        <thead class="thead-light">
+                        <th>Наименование</th>
+                        <th>Количество человек</th>
+                        <th>Себестоимость</th>
+                        <th>Приход</th>
+                        <th>Коммиссия гида</th>
+                        <th>Прибыль компании</th>
+                        </thead>
+                        <tbody>
+                        {% set totalASGuide = 0 %}
+                        {% set totalASCompany = 0 %}
+                        {% for s in tourist_group.additionalServices %}
+                            <tr>
+                                <td><a href="/additional_services/{{ s.id }}">{{ s.servicesSupplier.name }}</a></td>
+                                <td>{{ s.numberOfPersons }}</td>
+                                <td>{{ s.costPrice|localizedcurrency('RUB') }}</td>
+                                <td>{{ s.incomeValue|localizedcurrency('RUB') }}</td>
+                                <td>{{ s.guideCommissionValue|localizedcurrency('RUB') }}</td>
+                                <td>{{ s.companyCommissionValue|localizedcurrency('RUB') }}</td>
+                                {% set totalASGuide = totalASGuide + s.guideCommissionValue %}
+                                {% set totalASCompany = totalASCompany + s.companyCommissionValue %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>ИТОГО:</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>{{ totalASGuide|localizedcurrency('RUB') }}</th>
+                            <th>{{ totalASCompany|localizedcurrency('RUB') }}</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                <hr>
+                <a href="{{ path('newAdditionalServices', {}) }}?tourist_group={{ tourist_group.id }}" class="btn btn-success">Добавить услуги</a>
+                <a href="{{ path('tourist_group') }}" class="btn btn-secondary">Назад</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="alert alert-info">
+           <p>ИТОГО (доходы - расходы): {{ (tourist_group.incomeServicesPaymentTotal - totalE)|localizedcurrency('RUB') }}</p>
+           <p>ИТОГО (доход по доп. услугам): {{ totalASCompany|localizedcurrency('RUB') }}</p>
+           <p style="font-weight: bold">Общая сумма прибыли по группе: {{ (tourist_group.incomeServicesPaymentTotal - totalE +totalASCompany + totalPCompany)|localizedcurrency('RUB')  }}</p>
+        </div>
+    </div>
+
+    {% endif %}
+
+
+    {% if is_granted(expression('"ROLE_GUIDE" in roles')) %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Покупки</h3>
+                <table id="tourist-group-show-guide-table" class="table table-striped table-bordered" style="font-size: 0.875rem">
+                    <thead class="thead-light">
+                    <th>Магазин</th>
+                    <th>Дата покупки</th>
+                    <th>Сумма покупки</th>
+                    <th>Коммиссия руководителя группы</th>
+                    </thead>
+                    <tbody>
+                    {% set totalSales = 0 %}
+                    {% set totalLeader = 0 %}
+                    {% for p in tourist_group.purchases %}
+                        <tr>
+                            <td><a href="/purchase/{{ p.id }}">{{ p.tradePoint.name }}</a></td>
+                            <td>{{ p.date|date('d.m.Y') }}</td>
+                            <td>{{ p.salesReceipt|localizedcurrency('RUB') }}</td>
+                            <td>{{ p.groupLeaderCommissionValue|localizedcurrency('RUB') }}</td>
+                        </tr>
+                        {% set totalSales = totalSales + p.salesReceipt %}
+                        {% set totalLeader = totalLeader + p.groupLeaderCommissionValue %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div style="margin-left:0;" class="alert alert-info">
+                    <p style="font-weight: bold">ИТОГО:</p>
+                    <p>Сумма покупок: {{ totalSales|localizedcurrency('RUB') }}</p>
+                    <p>Комиссия руководителя группы: {{ totalLeader|localizedcurrency('RUB') }}</p>
+                </div>
+
+
+                <hr>
+                <a href="{{ path('new_purchase') }}?tourist_group={{ tourist_group.id }}" class="btn btn-success">Добавить покупки</a>
+
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Дополнительные услуги</h3>
+                <table id="ad-ser-guide-table" class="table table-striped table-bordered">
+                    <thead class="thead-light">
+                    <th>Наименование</th>
+                    <th>Количество человек</th>
+                    <th>Приход</th>
+                    </thead>
+                    <tbody>
+                    {% for s in tourist_group.additionalServices %}
+                        <tr>
+                            <td><a href="/additional_services/{{ s.id }}">{{ s.servicesSupplier.name }}</a></td>
+                            <td>{{ s.numberOfPersons }}</td>
+                            <td>{{ s.incomeValue|localizedcurrency('RUB') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <hr>
+                <a href="{{ path('newAdditionalServices', {}) }}?tourist_group={{ tourist_group.id }}" class="btn btn-success">Добавить услуги</a>
+                <a href="{{ path('main_page') }}" class="btn btn-secondary">Назад</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+
+    {% endif %}
+{% endblock %}
+

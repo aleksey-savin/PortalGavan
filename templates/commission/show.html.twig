@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>{{ commission.name }}</h1>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                    <tr>
+                        <td>Магазин</td>
+                        <td>{{ commission.tradePointId.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Тип комиссии</td>
+                        {% if commission.type == 'percent' %}
+                        <td>Процент</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>Общая комиссия</td>
+                        <td>{{ commission.totalCommissionPct|localizednumber('percent') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Общая комиссия (информация для гида)</td>
+                        <td>{{ commission.ftotalCommissionPct|localizednumber('percent') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Комиссия руководителя группы</td>
+                        <td>{{ commission.groupLeaderCommissionPct|localizednumber('percent') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Комиссия гида</td>
+                        <td>{{ commission.guideCommissionPct|localizednumber('percent') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Комиссия компании</td>
+                        <td>{{ commission.companyCommissionPct|localizednumber('percent') }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <a href="{{ path('edit_commission',{id: commission.id}) }}?trade_point={{ commission.tradePointId.id }}" class="btn btn-success">Изменить</a>
+                <a href="/trade_point/{{ commission.tradePointId.id }}" class="btn btn-secondary">Назад</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>{{ services_supplier.name }}</h1>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>Себестоимость за человека</th>
+                        <td>{{ services_supplier.costPerPerson|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Стоимость для Клиента</th>
+                        <td>{{ services_supplier.costForClient|localizedcurrency('RUB') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Комиссия гида</th>
+                        <td>{{ services_supplier.guideCommissionPct|localizednumber('percent') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Контактное лицо</th>
+                        <td>{{ services_supplier.contactName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Контактный номер</th>
+                        <td>{{ services_supplier.contactNumber }}</td>
+                    </tr>
+                    <tr>
+                        <th>Примечание</th>
+                        <td>{{ services_supplier.note }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <a href="/services_supplier/edit/{{ services_supplier.id }}" class="btn btn-success">Изменить информацию об услуге</a>
+                <hr>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

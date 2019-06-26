@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <!-- ОТОБРАЖЕНИЕ ГРУПП ДЛЯ ГИДА, ТОЛЬКО ЕГО ГРУППЫ -->
+    {% if is_granted(expression('"ROLE_GUIDE" in roles')) %}
+            <h4>Новые тур. группы</h4>
+            <table id="main-page-new-table" class="table table-striped table-bordered">
+                <thead class="thead-light">
+                <th>#</th>
+                <th>Количество человек</th>
+                <th>Количество детей</th>
+                <th>Дата заезда</th>
+                <th>Дата выезда</th>
+                </thead>
+                <tbody>
+                {% for group in tourist_group %}
+                    {% if group.status == 'newGroup' %}
+                        <tr>
+                            <td><a href="{{ path('tourist_group_show', {id: group.id}) }}">{{ group.id }}</a></td>
+                            <td>{{ group.numberOfPersons }}</td>
+                            <td>{{ group.numberOfChildPersons }}</td>
+                            <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                            <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h4>Ожидают утверждения отчёта</h4>
+            <table id="main-page-waiting-table" class="table table-striped table-bordered">
+                <thead class="thead-light">
+                <th>#</th>
+                <th>Количество человек</th>
+                <th>Количество детей</th>
+                <th>Дата заезда</th>
+                <th>Дата выезда</th>
+                </thead>
+                <tbody>
+                {% for group in tourist_group %}
+                    {% if group.status == 'approveRequest' %}
+                        <tr>
+                            <td><a href="{{ path('tourist_group_show', {id: group.id}) }}">{{ group.id }}</a></td>
+                            <td>{{ group.numberOfPersons }}</td>
+                            <td>{{ group.numberOfChildPersons }}</td>
+                            <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                            <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h4>Отчёт утверждён</h4>
+            <table id="main-page-approved-table" class="table table-striped table-bordered">
+                <thead class="thead-light">
+                <th>#</th>
+                <th>Количество человек</th>
+                <th>Количество детей</th>
+                <th>Дата заезда</th>
+                <th>Дата выезда</th>
+                </thead>
+                <tbody>
+                {% for group in tourist_group %}
+                    {% if group.status == 'reportApproved' %}
+                        <tr>
+                            <td><a href="{{ path('tourist_group_show', {id: group.id}) }}">{{ group.id }}</a></td>
+                            <td>{{ group.numberOfPersons }}</td>
+                            <td>{{ group.numberOfChildPersons }}</td>
+                            <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                            <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+    {% endif %}
+
+<!-- ОТОБРАЖЕНИЕ ГРУПП ДЛЯ АДМИНИСТРАТОРА, ВСЕ ГИДЫ -->
+    {% if is_granted(expression('"ROLE_ADMIN" in roles')) %}
+        <a href="/tourist_group/new" class="btn btn-success">Новая туристическая группа</a>
+        <hr>
+        <h4>Новые тур. группы</h4>
+        <table id="main-page-new-table" class="table table-striped table-bordered">
+            <thead class="thead-light">
+            <th>#</th>
+            <th>Гид</th>
+            <th>ПЛОТ</th>
+            <th>Количество человек</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            </thead>
+            <tbody>
+            {% for group in tourist_group %}
+                {% if group.status == 'newGroup' %}
+                    <tr>
+                        <td><a href="{{ path('tourist_group_show', {id: group.id}) }}">{{ group.id }}</a></td>
+                        <td>{{ group.appUser.realName }}</td>
+                        <td>{{ group.appUser.pLOTNumber }}</td>
+                        <td>{{ group.numberOfPersons }}</td>
+                        <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                        <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h4>Ожидают утверждения отчёта</h4>
+        <table id="main-page-waiting-table" class="table table-striped table-bordered">
+            <thead class="thead-light">
+            <th>#</th>
+            <th>Гид</th>
+            <th>ПЛОТ</th>
+            <th>Количество человек</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            </thead>
+            <tbody>
+            {% for group in tourist_group %}
+                {% if group.status == 'approveRequest' %}
+                    <tr>
+                        <td><a href="{{ path('tourist_group_show', {id: group.id}) }}">{{ group.id }}</a></td>
+                        <td>{{ group.appUser.realName }}</td>
+                        <td>{{ group.appUser.pLOTNumber }}</td>
+                        <td>{{ group.numberOfPersons }}</td>
+                        <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                        <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <h4>Отчёт утверждён</h4>
+        <table id="main-page-approved-table" class="table table-striped table-bordered">
+            <thead class="thead-light">
+            <th>#</th>
+            <th>Гид</th>
+            <th>ПЛОТ</th>
+            <th>Количество человек</th>
+            <th>Дата заезда</th>
+            <th>Дата выезда</th>
+            </thead>
+            <tbody>
+            {% for group in tourist_group %}
+                {% if group.status == 'reportApproved' %}
+                    <tr>
+                        <td><a href="{{ path('tourist_group_show', {id: group.id}) }}">{{ group.id }}</a></td>
+                        <td>{{ group.appUser.realName }}</td>
+                        <td>{{ group.appUser.pLOTNumber }}</td>
+                        <td>{{ group.numberOfPersons }}</td>
+                        <td>{{ group.dateOfArrival|date('d.m.Y') }}</td>
+                        <td>{{ group.dateOfDeparture|date('d.m.Y') }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

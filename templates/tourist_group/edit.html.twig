@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редактирование группы{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_start(tourist_group) }}
+                {# <p>{{ form_row(tourist_group.groupNumber) }}</p> #}
+                <p>{{ form_row(tourist_group.appUser) }}</p>
+                <p>{{ form_row(tourist_group.numberOfPersons) }}</p>
+                <p>{{ form_row(tourist_group.numberOfChildPersons) }}</p>
+                <p>{{ form_row(tourist_group.dateOfArrival) }}</p>
+                <p>{{ form_row(tourist_group.dateOfDeparture) }}</p>
+                <p>{{ form_row(tourist_group.foreignCompany) }}</p>
+                <p>{{ form_row(tourist_group.note) }}</p>
+                <p>{{ form_row(tourist_group.status) }}</p>
+                <p>{{ form_row(tourist_group.save) }}</p>
+                {{ form_end(tourist_group) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
